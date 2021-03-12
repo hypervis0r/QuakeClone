@@ -11,10 +11,10 @@ void render(GLFWwindow* window)
 	
 	const GLfloat triangle_verts[] = {
 		// positions          // colors           // texture coords
-		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
-		0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
-	   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
-	   -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
+		-1.f,  1.f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
+		-1.f,  -1.f, 0.0f,  0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right
+	     1.f, -1.f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left
+	     1.f,  1.f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // top left 
 	};
 	const GLuint indices[] = {  // note that we start from 0!
 	0, 1, 3,   // first triangle
@@ -65,8 +65,11 @@ void render(GLFWwindow* window)
 
 		glUseProgram(color_shader_program);
 
-		GLuint uniform_location = glGetUniformLocation(color_shader_program, "transform");
-		glUniformMatrix4fv(uniform_location, 1, GL_FALSE, trans[0]);
+		// update the uniform color
+		float timeValue = glfwGetTime();
+		float greenValue = sin(timeValue) / 2.0f + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(color_shader_program, "inColor");
+		glUniform4f(vertexColorLocation, greenValue, 0.0f, greenValue, 1.0f);
 
 		glBindVertexArray(VAO);
 
